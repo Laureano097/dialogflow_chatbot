@@ -7,8 +7,13 @@ const uuid = require('uuid');
 const app = express();
 app.use(bodyParser.json());
 
+
 const cors = require('cors');
-app.use(cors());
+app.use(cors({
+    origin: 'https://tu-sitio-en-netlify.netlify.app', // Reemplaza con tu dominio de Netlify
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type']
+}));
 
 app.options('/dialogflow', cors());
 
