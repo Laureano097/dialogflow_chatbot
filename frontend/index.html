@@ -11,15 +11,12 @@
       height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center; /* centra contenido verticalmente */
+      align-items: center;
+      padding: 20px;
       box-sizing: border-box;
     }
     .container {
       text-align: center;
-    }
-    .chat-wrapper {
-      display: inline-block;
-      vertical-align: top;
     }
     .chat-wrapper h1 {
       margin: 0 0 8px;
@@ -32,6 +29,9 @@
       font-size: 0.95rem;
       line-height: 1.4;
     }
+    .chat-wrapper p strong {
+      color: #333;
+    }
     .chat-container {
       background: white;
       width: 380px;
@@ -41,31 +41,33 @@
       flex-direction: column;
       border-radius: 8px;
       overflow: hidden;
-      margin: 0 auto; /* centra horizontal basado en width */
+      margin: auto;
     }
     .messages {
       flex: 1;
       padding: 15px;
       overflow-y: auto;
       background: #fafafa;
+      display: flex;
+      flex-direction: column;
     }
     .message {
       margin-bottom: 10px;
       padding: 10px;
       border-radius: 8px;
       max-width: 75%;
-      line-height: 1.4;
       word-wrap: break-word;
+      text-align: left;
     }
     .user {
       background: #79bcd3;
       color: white;
-      align-self: flex-end;
+      align-self: flex-end; /* Alineación a la derecha */
     }
     .bot {
       background: #e3e3e3;
       color: #333;
-      align-self: flex-start;
+      align-self: flex-start; /* Alineación a la izquierda */
     }
     .input-container {
       display: flex;
@@ -87,7 +89,7 @@
       padding: 0 20px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s;
     }
     button:hover {
       background: #4c8fec;
@@ -95,19 +97,17 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="chat-wrapper">
-      <h1>Dialogflow Chatbot</h1>
-      <p>
-        Puedo responder sobre <strong>ubicación, medios de pago, horarios de atención, envíos</strong>.<br>
-        También podés <strong>pedir hablar con un agente</strong>.
-      </p>
-      <div class="chat-container">
-        <div class="messages" id="chat"></div>
-        <div class="input-container">
-          <input id="input" placeholder="Escribí tu mensaje..." onkeypress="handleKeyPress(event)">
-          <button onclick="enviar()">Enviar</button>
-        </div>
+  <div class="container chat-wrapper">
+    <h1>Dialogflow Chatbot</h1>
+    <p>
+      Puedo responder sobre <strong>ubicación, medios de pago, horarios de atención, envíos</strong>.<br>
+      También podés <strong>pedir hablar con un agente</strong>.
+    </p>
+    <div class="chat-container">
+      <div class="messages" id="chat"></div>
+      <div class="input-container">
+        <input id="input" placeholder="Escribí tu mensaje..." onkeypress="if(event.key==='Enter') enviar()">
+        <button onclick="enviar()">Enviar</button>
       </div>
     </div>
   </div>
@@ -127,10 +127,8 @@
       const input = document.getElementById("input");
       const texto = input.value.trim();
       if (!texto) return;
-
       agregarMensaje(texto, "user");
       input.value = "";
-
       fetch("/api/query", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -139,10 +137,6 @@
       .then(res => res.json())
       .then(data => agregarMensaje(data.reply, "bot"))
       .catch(err => agregarMensaje("Error: " + err.message, "bot"));
-    }
-
-    function handleKeyPress(event) {
-      if (event.key === "Enter") enviar();
     }
   </script>
 </body>
