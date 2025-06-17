@@ -10,6 +10,8 @@ app.use(bodyParser.json());
 const cors = require('cors');
 app.use(cors());
 
+app.options('/dialogflow', cors());
+
 const projectId = 'silver-osprey-462817-p7';  // Reemplazá con tu Project ID de Google Cloud
 const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS_JSON);
 const sessionClient = new dialogflow.SessionsClient({ credentials });
