@@ -2,44 +2,69 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>ChatBot con Backend</title>
+  <title>Dialogflow Chatbot</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #5384b3;
+      background: #f0f4f8;
       margin: 0;
+      height: 100vh;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: center; /* centra contenido verticalmente */
+      box-sizing: border-box;
+    }
+    .container {
+      text-align: center;
+    }
+    .chat-wrapper {
+      display: inline-block;
+      vertical-align: top;
+    }
+    .chat-wrapper h1 {
+      margin: 0 0 8px;
+      color: #333;
+      font-size: 1.5rem;
+    }
+    .chat-wrapper p {
+      margin: 0 0 12px;
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.4;
     }
     .chat-container {
       background: white;
-      width: 400px;
-      height: 500px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      width: 380px;
+      height: 520px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
-      border-radius: 10px;
+      border-radius: 8px;
       overflow: hidden;
+      margin: 0 auto; /* centra horizontal basado en width */
     }
     .messages {
       flex: 1;
       padding: 15px;
       overflow-y: auto;
+      background: #fafafa;
     }
     .message {
       margin-bottom: 10px;
       padding: 10px;
       border-radius: 8px;
-      max-width: 80%;
+      max-width: 75%;
+      line-height: 1.4;
+      word-wrap: break-word;
     }
     .user {
-      background: #82c0b1;
+      background: #79bcd3;
+      color: white;
       align-self: flex-end;
     }
     .bot {
-      background: #ececec;
+      background: #e3e3e3;
+      color: #333;
       align-self: flex-start;
     }
     .input-container {
@@ -49,28 +74,41 @@
     input {
       flex: 1;
       border: none;
-      padding: 10px;
-      font-size: 16px;
+      padding: 12px;
+      font-size: 1rem;
     }
     input:focus {
       outline: none;
     }
     button {
       border: none;
-      background: #4CAF50;
+      background: #5fa1ff;
       color: white;
       padding: 0 20px;
-      font-size: 16px;
+      font-size: 1rem;
       cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background: #4c8fec;
     }
   </style>
 </head>
 <body>
-  <div class="chat-container">
-    <div class="messages" id="chat"></div>
-    <div class="input-container">
-      <input id="input" placeholder="Escribí tu mensaje..." onkeypress="handleKeyPress(event)">
-      <button onclick="enviar()">Enviar</button>
+  <div class="container">
+    <div class="chat-wrapper">
+      <h1>Dialogflow Chatbot</h1>
+      <p>
+        Puedo responder sobre <strong>ubicación, medios de pago, horarios de atención, envíos</strong>.<br>
+        También podés <strong>pedir hablar con un agente</strong>.
+      </p>
+      <div class="chat-container">
+        <div class="messages" id="chat"></div>
+        <div class="input-container">
+          <input id="input" placeholder="Escribí tu mensaje..." onkeypress="handleKeyPress(event)">
+          <button onclick="enviar()">Enviar</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -99,12 +137,8 @@
         body: JSON.stringify({ query: texto })
       })
       .then(res => res.json())
-      .then(data => {
-        agregarMensaje(data.reply, "bot");
-      })
-      .catch(err => {
-        agregarMensaje("Error: " + err.message, "bot");
-      });
+      .then(data => agregarMensaje(data.reply, "bot"))
+      .catch(err => agregarMensaje("Error: " + err.message, "bot"));
     }
 
     function handleKeyPress(event) {
