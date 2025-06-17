@@ -93,7 +93,7 @@
       agregarMensaje(texto, "user");
       input.value = "";
 
-      fetch("https://dialogflowchatbot-production.up.railway.app", {
+      fetch("https://dialogflowchatbot-production.up.railway.app/dialogflow", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query: texto })
